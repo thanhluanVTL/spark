@@ -1,0 +1,3 @@
+pyspark
+pyspark[connect]
+pyspark[sql]

@@ -1,0 +1,11 @@
+version: "3.3"
+services:
+  python:
+    # image: spark-python-client:latest
+    image: spark:3.5.1-python3
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    # volumes:
+    #    - ./code:/home/app/code
+
+    
