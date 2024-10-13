@@ -1,0 +1,61 @@
+version: "3.3"
+services:
+  spark-master:
+    image: spark-yarn:latest
+    # image: spark:3.5.1-python3
+    container_name: master
+    ports:
+      - 8080:8080
+      - 7077:7077
+    networks:
+      spark_network:
+          ipv4_address: 172.20.0.2
+    volumes:
+      - /home/luanvt/Projects/spark/spark-yarn/conf/master/:/opt/spark/conf/
+      - /home/luanvt/Projects/spark/spark-yarn/logs/master/:/opt/spark/logs/
+      - /home/luanvt/Projects/spark/spark-yarn/code/:/opt/spark/work-dir/
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    command: /bin/bash
+
+  spark-worker-a:
+    image: spark-yarn:latest
+    # image: spark:3.5.1-python3
+    container_name: worker-a
+    ports:
+      - 6067:6067
+      - 7075:7075
+    networks:
+      spark_network:
+          ipv4_address: 172.20.0.3
+    volumes:
+      - /home/luanvt/Projects/spark/spark-yarn/conf/worker/:/opt/spark/conf/
+      - /home/luanvt/Projects/spark/spark-yarn/logs/worker/:/opt/spark/logs/
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    command: /bin/bash
+  
+  spark-worker-b:
+    image: spark-yarn:latest
+    # image: spark:3.5.1-python3
+    container_name: worker-b
+    ports:
+      - 6068:6067
+      - 7076:7075
+    networks:
+      spark_network:
+          ipv4_address: 172.20.0.5
+    volumes:
+      - /home/luanvt/Projects/spark/spark-yarn/conf/worker/:/opt/spark/conf
+      - /home/luanvt/Projects/spark/spark-yarn/logs/worker/:/opt/spark/logs
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    command: /bin/bash
+    
+networks:
+  spark_network:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+    
+

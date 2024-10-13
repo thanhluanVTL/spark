@@ -1,0 +1,7 @@
+Host 172.20.0.3
+  PreferredAuthentications publickey
+  IdentityFile "/home/luanvt/.ssh/id_rsa"
+
+Host 172.20.0.5
+  PreferredAuthentications publickey
+  IdentityFile "/home/luanvt/.ssh/id_rsa"

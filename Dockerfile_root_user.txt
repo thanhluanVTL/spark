@@ -1,0 +1,58 @@
+# FROM spark:3.5.1-python3
+
+# USER root
+
+# RUN apt-get update \
+# && apt-get install -y nano openssh-server sudo \
+# && rm -rf /var/lib/apt/lists/*
+
+
+FROM ubuntu:20.04
+
+USER root
+
+RUN apt-get update && apt-get -y dist-upgrade \
+&& apt-get install -y openssh-server default-jdk wget scala nano sudo \
+&& rm -rf /var/lib/apt/lists/* \
+&& mkdir -p /opt/spark
+
+ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+
+WORKDIR /tmp
+
+COPY ./spark-3.5.1-bin-hadoop3.tgz ./spark-3.5.1-bin-hadoop3.tgz
+RUN tar -xf spark-3.5.1-bin-hadoop3.tgz
+RUN mv ./spark-3.5.1-bin-hadoop3/* /opt/spark
+RUN rm -rf ./spark-3.5.1-bin-hadoop3
+RUN rm -rf ./spark-3.5.1-bin-hadoop3.tgz
+
+
+# RUN wget -O /spark.tar.gz -q https://archive.apache.org/dist/spark/spark-3.5.1/spark-3.5.1-bin-hadoop3.tgz
+# RUN tar xfz spark.tar.gz
+# RUN mv /spark-3.5.1-bin-hadoop3 /opt/spark
+# RUN rm /spark.tar.gz
+
+
+# RUN ssh-keygen -t rsa -f $HOME/.ssh/id_rsa -P "" \
+#     && cat $HOME/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys
+
+RUN ssh-keygen -t rsa -f $HOME/.ssh/id_rsa -P ""
+
+# RUN mkdir -p $HOME/.ssh/
+
+# COPY ./ssh/* $HOME/.ssh/
+ADD --chmod=600 ./ssh/id_rsa $HOME/.ssh/id_rsa
+ADD --chmod=600 ./ssh/id_rsa.pub $HOME/.ssh/id_rsa.pub
+ADD ./ssh/config $HOME/.ssh/config
+
+# RUN chmod 700 $HOME/.ssh
+
+# RUN chmod 600 -R $HOME/.ssh/id_rsa
+# RUN chmod 600 -R $HOME/.ssh/id_rsa.pub
+
+COPY ./ssh/sshd_config /etc/ssh/sshd_config
+# ADD ./ssh/sshd_config /etc/ssh/sshd_config
+
+
+WORKDIR $HOME/.ssh
+# WORKDIR /opt/spark
